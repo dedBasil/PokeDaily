@@ -1,0 +1,4 @@
+node_modules/
+dist/
+# regenerate with: node scripts/download-data.mjs
+data/raw/
