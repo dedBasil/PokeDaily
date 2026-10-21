@@ -93,8 +93,8 @@ export function attack(attacker: Pokemon, defender: Pokemon, move: Move): number
  * - exact tie: `a` goes first (a is always the player, so ties favour the player)
  */
 export function goesFirst(a: Pokemon, b: Pokemon, moveA: Move, moveB: Move): boolean {
-  // TODO
-  return true;
+  if (moveA.priority !== moveB.priority) return moveA.priority > moveB.priority;
+  return a.spe >= b.spe;
 }
 
 /**
