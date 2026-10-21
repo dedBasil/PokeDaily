@@ -107,6 +107,36 @@ export function goesFirst(a: Pokemon, b: Pokemon, moveA: Move, moveB: Move): boo
  * 5. turn + 1.
  */
 export function step(puzzle: Puzzle, state: BattleState, playerMove: number, enemyMove: number): BattleState {
-  // TODO
-  return state;
+  // Work on a copy; the caller's state must stay untouched.
+  const next: BattleState = {
+    ...state,
+    playerHp: [...state.playerHp],
+    enemyHp: [...state.enemyHp],
+    turn: state.turn + 1,
+  };
+  const p = puzzle.player[state.player];
+  const e = puzzle.enemy[state.enemy];
+  const pMove = p.moves[playerMove];
+  const eMove = e.moves[enemyMove];
+
+  // Each returns true if the target fainted, so the target doesn't get to hit back.
+  const playerHits = (): boolean => {
+    next.enemyHp[next.enemy] = Math.max(0, next.enemyHp[next.enemy] - attack(p, e, pMove));
+    if (next.enemyHp[next.enemy] > 0) return false;
+    next.enemy++;
+    return true;
+  };
+  const enemyHits = (): boolean => {
+    next.playerHp[next.player] = Math.max(0, next.playerHp[next.player] - attack(e, p, eMove));
+    if (next.playerHp[next.player] > 0) return false;
+    next.player++;
+    return true;
+  };
+
+  if (goesFirst(p, e, pMove, eMove)) {
+    if (!playerHits()) enemyHits();
+  } else {
+    if (!enemyHits()) playerHits();
+  }
+  return next;
 }

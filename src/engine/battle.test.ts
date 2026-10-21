@@ -45,6 +45,12 @@ describe("TASK 3: step", () => {
     expect(after).toEqual({ playerHp: [110], enemyHp: [0, 235], player: 0, enemy: 1, turn: 2 });
   });
 
+  test("enemy is faster: Pikachu hits Snorlax first (34), then Snorlax knocks it out (124)", () => {
+    const slowPuzzle: Puzzle = { player: [snorlax], enemy: [pikachu] };
+    const after = step(slowPuzzle, startState(slowPuzzle), 0, 0);
+    expect(after).toEqual({ playerHp: [201], enemyHp: [0], player: 0, enemy: 1, turn: 1 });
+  });
+
   test("step does not change the state you pass in", () => {
     const before = startState(puzzle);
     step(puzzle, before, 0, 0);
